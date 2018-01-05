@@ -16,11 +16,20 @@ using DynamicTranslator.Domain.Events;
 using DynamicTranslator.Domain.Model;
 using DynamicTranslator.Service.GoogleAnalytics;
 using DynamicTranslator.Wpf.Notification;
+using RestSharp;
+using DynamicTranslator.Wpf.ViewModel;
+using Newtonsoft.Json;
+using System.Net.Http;
+using System.Windows.Media;
 
 namespace DynamicTranslator.Wpf.Observers
 {
     public class Finder : IObserver<EventPattern<WhenClipboardContainsTextEventArgs>>, ISingletonDependency
     {
+        private const string Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
+        private const string AcceptEncoding = "gzip, deflate, sdch";
+        private const string AcceptLanguage = "en-US,en;q=0.8,tr;q=0.6";
+        private const string UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36";
         private readonly ICacheManager _cacheManager;
         private readonly IDynamicTranslatorConfiguration _configuration;
         private readonly IGoogleAnalyticsService _googleAnalytics;
@@ -29,7 +38,7 @@ namespace DynamicTranslator.Wpf.Observers
         private readonly INotifier _notifier;
         private readonly IResultOrganizer _resultOrganizer;
         private string _previousString;
-
+       
         public Finder(INotifier notifier,
             IMeanFinderFactory meanFinderFactory,
             IResultOrganizer resultOrganizer,
@@ -45,6 +54,7 @@ namespace DynamicTranslator.Wpf.Observers
             _googleAnalytics = googleAnalytics;
             _languageDetector = languageDetector;
             _configuration = configuration;
+           
         }
 
         public void OnCompleted()
@@ -69,19 +79,25 @@ namespace DynamicTranslator.Wpf.Observers
                     }
 
                     _previousString = currentString;
-                    Maybe<string> failedResults;
-
-                    string fromLanguageExtension = await _languageDetector.DetectLanguage(currentString);
-                    TranslateResult[] results = await GetMeansFromCache(currentString, fromLanguageExtension);
-                    Maybe<string> findedMeans = await _resultOrganizer.OrganizeResult(results, currentString, out failedResults).ConfigureAwait(false);
-
+                    RootObject resultDict = startCrawlerTraCau(_previousString).Result;
+                    string resultVoca = "";
+                    foreach(var result in resultDict.messages)
+                    {
+                        resultVoca += result.text + "\n";
+                    }
+                    string urlSound = resultDict.messages.LastOrDefault().attachment.payload.url.ToString();
+                    MediaPlayer mplayer = new MediaPlayer() ;
+                   var url = urlSound.Replace("https://", "http://");
+                    mplayer.Open(new Uri(url));
+                    mplayer.Play();
+                    Maybe<string> findedMeans = new Maybe<string>(resultVoca);
+                    
                     await Notify(currentString, findedMeans);
-                    await Notify(currentString, failedResults);
-                    await Trace(currentString, fromLanguageExtension);
+                   // await Trace(currentString, fromLanguageExtension);
                 }
                 catch (Exception ex)
                 {
-                    await Notify("Error", new Maybe<string>(ex.Message));
+                  //  await Notify("Error", new Maybe<string>(ex.Message));
                 }
             });
         }
@@ -117,6 +133,17 @@ namespace DynamicTranslator.Wpf.Observers
 
             return _cacheManager.GetCache<string, TranslateResult[]>(CacheNames.MeanCache)
                                 .GetAsync(currentString, () => meanTasks);
+        }
+        public async Task<RootObject> startCrawlerTraCau(string voca)
+        {
+            
+            var url = "http://olympusenglish.azurewebsites.net/Dictionary/callChatBot?contain="+voca;
+            HttpClient httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            var response = await httpClient.PostAsync(url, null);
+            string result = await response.Content.ReadAsStringAsync();
+            RootObject dict = JsonConvert.DeserializeObject<RootObject>(result);
+            return dict;
         }
     }
 }

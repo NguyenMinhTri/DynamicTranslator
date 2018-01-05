@@ -66,9 +66,9 @@ namespace DynamicTranslator.Wpf.ViewModel
             {
                 _btnSwitch.Content = "Stop Translator";
 
-                string selectedLanguageName = ((Language)_comboBoxLanguages.SelectedItem).Name;
-                _configurations.AppConfigManager.SaveOrUpdate("ToLanguage", selectedLanguageName);
-                _configurations.ApplicationConfiguration.ToLanguage = new Language(selectedLanguageName, LanguageMapping.All[selectedLanguageName]);
+              //  string selectedLanguageName = ((Language)_comboBoxLanguages.SelectedItem).Name;
+              //  _configurations.AppConfigManager.SaveOrUpdate("ToLanguage", selectedLanguageName);
+              //  _configurations.ApplicationConfiguration.ToLanguage = new Language(selectedLanguageName, LanguageMapping.All[selectedLanguageName]);
 
                 PrepareTranslators();
                 LockUiElements();
@@ -89,10 +89,10 @@ namespace DynamicTranslator.Wpf.ViewModel
         {
             foreach (Language language in LanguageMapping.All.ToLanguages())
             {
-                _comboBoxLanguages.Items.Add(language);
+               // _comboBoxLanguages.Items.Add(language);
             }
 
-            _comboBoxLanguages.SelectedValue = _configurations.ApplicationConfiguration.ToLanguage.Extension;
+            //_comboBoxLanguages.SelectedValue = _configurations.ApplicationConfiguration.ToLanguage.Extension;
         }
 
         private Task<Release> GetReleaseFromCache(GitHubClient gitHubClient)
@@ -141,13 +141,13 @@ namespace DynamicTranslator.Wpf.ViewModel
 
         private void LockUiElements()
         {
-            _comboBoxLanguages.Focusable = false;
-            _comboBoxLanguages.IsHitTestVisible = false;
-            _checkBoxGoogleTranslate.IsHitTestVisible = false;
-            _checkBoxTureng.IsHitTestVisible = false;
-            _checkBoxYandexTranslate.IsHitTestVisible = false;
-            _checkBoxSesliSozluk.IsHitTestVisible = false;
-            _checkBoxPrompt.IsHitTestVisible = false;
+            //_comboBoxLanguages.Focusable = false;
+            //_comboBoxLanguages.IsHitTestVisible = false;
+            //_checkBoxGoogleTranslate.IsHitTestVisible = false;
+            //_checkBoxTureng.IsHitTestVisible = false;
+            //_checkBoxYandexTranslate.IsHitTestVisible = false;
+            //_checkBoxSesliSozluk.IsHitTestVisible = false;
+            //_checkBoxPrompt.IsHitTestVisible = false;
         }
 
         private void NewVersionButtonClick(object sender, RoutedEventArgs e)
@@ -163,30 +163,30 @@ namespace DynamicTranslator.Wpf.ViewModel
         {
             _configurations.ActiveTranslatorConfiguration.PassivateAll();
 
-            if (_checkBoxGoogleTranslate.IsChecked != null && _checkBoxGoogleTranslate.IsChecked.Value)
-            {
-                _configurations.ActiveTranslatorConfiguration.Activate(TranslatorType.Google);
-            }
+            //if (_checkBoxGoogleTranslate.IsChecked != null && _checkBoxGoogleTranslate.IsChecked.Value)
+            //{
+            //    _configurations.ActiveTranslatorConfiguration.Activate(TranslatorType.Google);
+            //}
 
-            if (_checkBoxYandexTranslate.IsChecked != null && _checkBoxYandexTranslate.IsChecked.Value)
-            {
-                _configurations.ActiveTranslatorConfiguration.Activate(TranslatorType.Yandex);
-            }
+            //if (_checkBoxYandexTranslate.IsChecked != null && _checkBoxYandexTranslate.IsChecked.Value)
+            //{
+            //    _configurations.ActiveTranslatorConfiguration.Activate(TranslatorType.Yandex);
+            //}
 
-            if (_checkBoxTureng.IsChecked != null && _checkBoxTureng.IsChecked.Value)
-            {
-                _configurations.ActiveTranslatorConfiguration.Activate(TranslatorType.Tureng);
-            }
+            //if (_checkBoxTureng.IsChecked != null && _checkBoxTureng.IsChecked.Value)
+            //{
+            //    _configurations.ActiveTranslatorConfiguration.Activate(TranslatorType.Tureng);
+            //}
 
-            if (_checkBoxSesliSozluk.IsChecked != null && _checkBoxSesliSozluk.IsChecked.Value)
-            {
-                _configurations.ActiveTranslatorConfiguration.Activate(TranslatorType.SesliSozluk);
-            }
+            //if (_checkBoxSesliSozluk.IsChecked != null && _checkBoxSesliSozluk.IsChecked.Value)
+            //{
+            //    _configurations.ActiveTranslatorConfiguration.Activate(TranslatorType.SesliSozluk);
+            //}
 
-            if (_checkBoxPrompt.IsChecked != null && _checkBoxPrompt.IsChecked.Value)
-            {
-                _configurations.ActiveTranslatorConfiguration.Activate(TranslatorType.Prompt);
-            }
+            //if (_checkBoxPrompt.IsChecked != null && _checkBoxPrompt.IsChecked.Value)
+            //{
+            //    _configurations.ActiveTranslatorConfiguration.Activate(TranslatorType.Prompt);
+            //}
 
             if (!_configurations.ActiveTranslatorConfiguration.ActiveTranslators.Any())
             {
@@ -199,13 +199,13 @@ namespace DynamicTranslator.Wpf.ViewModel
 
         private void UnlockUiElements()
         {
-            _comboBoxLanguages.Focusable = true;
-            _comboBoxLanguages.IsHitTestVisible = true;
-            _checkBoxGoogleTranslate.IsHitTestVisible = true;
-            _checkBoxTureng.IsHitTestVisible = true;
-            _checkBoxYandexTranslate.IsHitTestVisible = true;
-            _checkBoxSesliSozluk.IsHitTestVisible = true;
-            _checkBoxPrompt.IsHitTestVisible = true;
+            //_comboBoxLanguages.Focusable = true;
+            //_comboBoxLanguages.IsHitTestVisible = true;
+            //_checkBoxGoogleTranslate.IsHitTestVisible = true;
+            //_checkBoxTureng.IsHitTestVisible = true;
+            //_checkBoxYandexTranslate.IsHitTestVisible = true;
+            //_checkBoxSesliSozluk.IsHitTestVisible = true;
+            //_checkBoxPrompt.IsHitTestVisible = true;
         }
     }
 }

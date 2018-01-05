@@ -231,6 +231,7 @@
     <Compile Include="Extensions\MultithreadUiExtensions.cs" />
     <Compile Include="IClipboardManager.cs" />
     <Compile Include="Notification\INotifier.cs" />
+    <Compile Include="ViewModel\Dictionary.cs" />
     <Compile Include="ViewModel\IGrowlNotifications.cs" />
     <Compile Include="ViewModel\INotification.cs" />
     <Compile Include="ViewModel\Notification.cs" />
